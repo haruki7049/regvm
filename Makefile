@@ -7,16 +7,16 @@ SRCDIR := src
 .PHONY: build
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) $< -o $@
+	@mkdir -p $(OBJDIR)
+	@$(CC) $(CFLAGS) $< -o $@
 
 build: $(OBJDIR)/main.o
-	mkdir -p bin
-	cc -o regvm $^
-	mv regvm bin
+	@mkdir -p bin
+	@$(CC) -o regvm $^
+	@mv regvm bin
 
 run: build
-	bin/regvm
+	@./bin/regvm
 
 clean:
 	rm -rf obj/ bin/ src/*.pch
