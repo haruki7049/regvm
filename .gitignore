@@ -2,3 +2,7 @@
 .direnv/
 result*
 result-*
+
+# C
+/bin/
+*.o
