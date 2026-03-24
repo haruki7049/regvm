@@ -2,7 +2,7 @@ CC ?= gcc
 CFLAGS := -Wall
 
 # External libraries
-CFLAGS += $(shell pkg-config --cflags argtable3)
+LIBS := argtable3
 
 BINARY := regvm
 OBJDIR := obj
@@ -16,14 +16,14 @@ OBJS := $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 .DEFAULT_GOAL := build
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c setup-dirs
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(shell pkg-config --cflags $(LIBS)) -c $< -o $@
 
 setup-dirs:
 	mkdir -p $(OBJDIR)
 	mkdir -p $(BINDIR)
 
 build: $(OBJS) setup-dirs
-	$(CC) -o $(BINDIR)/$(BINARY) $(OBJS)
+	$(CC) $(CFLAGS) $(shell pkg-config --cflags --libs $(LIBS)) -o $(BINDIR)/$(BINARY) $(OBJS)
 
 clean:
 	rm -rf $(OBJDIR) $(BINDIR) src/*.pch

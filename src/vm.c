@@ -1,7 +1,7 @@
 #include "./vm.h"
 
-struct RegVM create_reg_vm() {
-  struct RegVM result;
+RegVM create_reg_vm() {
+  RegVM result;
   result.r0 = 0;
   result.r1 = 0;
   result.r2 = 0;
