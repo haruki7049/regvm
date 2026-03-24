@@ -5,4 +5,4 @@ struct RegVM {
   unsigned int r3;
 };
 
-struct RegVM *create_reg_vm();
+struct RegVM create_reg_vm();
