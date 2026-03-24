@@ -36,21 +36,21 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-int display_help_message(void *argtable) {
+int display_help_message(void **argtable) {
   printf("Usage: %s", program_name);
   arg_print_syntax(stdout, argtable, "\n");
   printf("Demonstrate command-line parsing in argtable3.\n\n");
   arg_print_glossary(stdout, argtable, "  %-25s %s\n");
 
-  arg_freetable(argtable, sizeof(argtable));
+  arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
   return 0;
 }
 
-int display_error_message(void *argtable, const char program_name[]) {
+int display_error_message(void **argtable, const char program_name[]) {
   /* Display the error details contained in the arg_end struct.*/
   arg_print_errors(stdout, end, program_name);
   printf("Try '%s --help' for more information.\n", program_name);
 
-  arg_freetable(argtable, sizeof(argtable));
+  arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
   return 1;
 }
