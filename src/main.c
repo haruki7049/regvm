@@ -21,19 +21,9 @@ int main(int argc, char *argv[]) {
     return display_help_message(argtable, argtable_size);
   } else if (nerrors > 0) {
     return display_error_message(argtable, argtable_size, program_name);
+  } else {
+    return interpreter(argtable, argtable_size);
   }
-
-  RegVM vm = create_reg_vm();
-  printf("&vm: %p\n", &vm);
-  printf("vm.r0: %d\n", vm.r0);
-  printf("vm.r1: %d\n", vm.r1);
-  printf("vm.r2: %d\n", vm.r2);
-  printf("vm.r3: %d\n", vm.r3);
-  printf("\n");
-  printf("Hello, it's regvm!!\n");
-
-  arg_freetable(argtable, argtable_size);
-  return 0;
 }
 
 int display_help_message(void **argtable, int argtable_size) {

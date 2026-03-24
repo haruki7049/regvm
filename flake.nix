@@ -40,6 +40,7 @@
         let
           buildInputs = [
             pkgs.argtable # A CLI parser library
+            pkgs.linenoise # A interpreter library which is an alternative to GNU readline
           ];
           nativeBuildInputs = [
             pkgs.nil # Nix LSP

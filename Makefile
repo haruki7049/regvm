@@ -2,7 +2,7 @@ CC ?= gcc
 CFLAGS := -Wall
 
 # External libraries
-LIBS := argtable3
+LIBS := argtable3 linenoise
 
 BINARY := regvm
 OBJDIR := obj
