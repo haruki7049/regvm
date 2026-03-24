@@ -15,12 +15,13 @@ int main(int argc, char *argv[]) {
 
       end = arg_end(20),
   };
+  int argtable_size = sizeof(argtable) / sizeof(argtable[0]);
   int nerrors = arg_parse(argc, argv, argtable);
 
   if (help->count > 0) {
-    return display_help_message(argtable);
+    return display_help_message(argtable, argtable_size);
   } else if (nerrors > 0) {
-    return display_error_message(argtable, program_name);
+    return display_error_message(argtable, argtable_size, program_name);
   }
 
   RegVM vm = create_reg_vm();
@@ -32,25 +33,26 @@ int main(int argc, char *argv[]) {
   printf("\n");
   printf("Hello, it's regvm!!\n");
 
-  arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
+  arg_freetable(argtable, argtable_size);
   return 0;
 }
 
-int display_help_message(void **argtable) {
+int display_help_message(void **argtable, int argtable_size) {
   printf("Usage: %s", program_name);
   arg_print_syntax(stdout, argtable, "\n");
-  printf("Demonstrate command-line parsing in argtable3.\n\n");
+  printf("A virtual machine program for my practice to write C-language.\n\n");
   arg_print_glossary(stdout, argtable, "  %-25s %s\n");
 
-  arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
+  arg_freetable(argtable, argtable_size);
   return 0;
 }
 
-int display_error_message(void **argtable, const char program_name[]) {
+int display_error_message(void **argtable, int argtable_size,
+                          const char program_name[]) {
   /* Display the error details contained in the arg_end struct.*/
   arg_print_errors(stdout, end, program_name);
   printf("Try '%s --help' for more information.\n", program_name);
 
-  arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
+  arg_freetable(argtable, argtable_size);
   return 1;
 }
