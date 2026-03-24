@@ -38,9 +38,12 @@
           ...
         }:
         let
-          buildInputs = [ ];
+          buildInputs = [
+            pkgs.argtable # A CLI parser library
+          ];
           nativeBuildInputs = [
             pkgs.nil # Nix LSP
+            pkgs.pkg-config # pkg-config
             pkgs.clang-tools # C / C++ toolchain
             pkgs.gnumake # GNU Make
             pkgs.bear # A tool for generating compile_commands.json
@@ -66,10 +69,6 @@
 
           devShells.default = pkgs.mkShell {
             inherit buildInputs nativeBuildInputs;
-
-            LIBCLANG_PATH = lib.makeLibraryPath buildInputs;
-            LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
-
             inputsFrom = [ config.treefmt.build.devShell ];
 
             shellHook = ''
