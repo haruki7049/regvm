@@ -1,5 +1,8 @@
-CFLAGS ?= -Wall
-CC ?= gcc
+BINARY := regvm
+OBJECT := main.o
+SOURCE := main.c
+CFLAGS := -Wall
+CC := gcc
 
 build: main.o
 	mkdir -p bin
@@ -9,7 +12,7 @@ build: main.o
 main.o: src/main.c src/main.h
 	${CC} ${CFLAGS} -c $^
 
-clean: main.o bin/
+clean: main.o src/*.pch bin/
 	rm -r $^
 
 bear:
