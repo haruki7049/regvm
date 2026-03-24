@@ -7,3 +7,4 @@ typedef struct {
 
 RegVM create_reg_vm();
 int interpreter(void *argtable, int argtable_size);
+void mainloop(RegVM vm);

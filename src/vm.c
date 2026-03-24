@@ -1,6 +1,8 @@
 #include "./vm.h"
 #include <argtable3.h>
+#include <linenoise.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 RegVM create_reg_vm() {
   RegVM result;
@@ -22,6 +24,16 @@ int interpreter(void *argtable, int argtable_size) {
   printf("\n");
   printf("Hello, it's regvm!!\n");
 
+  mainloop(vm);
+
   arg_freetable(argtable, argtable_size);
   return 0;
+}
+
+void mainloop(RegVM vm) {
+  char *line;
+  while ((line = linenoise("regvm:> ")) != NULL) {
+    printf("You wrote: %s\n", line);
+    free(line);
+  }
 }
