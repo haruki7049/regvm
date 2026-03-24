@@ -15,6 +15,9 @@ build: $(OBJDIR)/main.o
 	cc -o regvm $^
 	mv regvm bin
 
+run: build
+	bin/regvm
+
 clean:
 	rm -rf obj/ bin/ src/*.pch
 
