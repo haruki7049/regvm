@@ -12,7 +12,7 @@ SRCS := $(wildcard $(SRCDIR)/*.c)
 # Generate object file paths from source file paths
 OBJS := $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-.PHONY: build clean bear set-dirs
+.PHONY: build clean bear set-dirs run
 .DEFAULT_GOAL := build
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c setup-dirs
@@ -30,3 +30,7 @@ clean:
 
 bear:
 	bear -- make
+
+run: build
+	@echo -ne "\n"
+	./bin/regvm
