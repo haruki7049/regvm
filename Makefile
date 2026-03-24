@@ -6,16 +6,17 @@ CC := gcc
 
 .PHONY: build
 
-build: main.o
+build: obj/main.o
 	mkdir -p bin
 	cc -o regvm $^
 	mv regvm bin
 
-main.o: src/main.c src/main.h
-	${CC} ${CFLAGS} -c $^
+obj/main.o: src/main.c
+	mkdir -p obj
+	${CC} ${CFLAGS} -c $^ -o obj/main.o
 
-clean: main.o src/*.pch bin/
-	rm -r $^
+clean:
+	rm -rf obj/ bin/ src/*.pch
 
 bear:
 	bear -- make

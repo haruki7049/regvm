@@ -5,5 +5,5 @@ result-*
 
 # C
 /bin/
-*.o
-*.pch
+/obj/
+/src/*.pch
