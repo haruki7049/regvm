@@ -1,5 +1,5 @@
 CC ?= gcc
-CFLAGS := -Wall
+CFLAGS := -Wall -std=c23
 
 # External libraries
 LIBS := argtable3 linenoise
