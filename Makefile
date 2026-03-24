@@ -1,23 +1,28 @@
 CC ?= gcc
-CFLAGS := -Wall -c
+CFLAGS := -Wall
 BINARY := regvm
 OBJDIR := obj
 SRCDIR := src
+BINDIR := bin
 SRCS := $(wildcard $(SRCDIR)/*.c)
+# Generate object file paths from source file paths
+OBJS := $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-.PHONY: build
+.PHONY: build clean bear set-dirs
+.DEFAULT_GOAL := build
 
-$(OBJDIR)/%.o: $(SRCS)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c setup-dirs
+	$(CC) $(CFLAGS) -c $< -o $@
+
+setup-dirs:
 	mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) $^
+	mkdir -p $(BINDIR)
 
-build: $(OBJDIR)/*.o
-	mkdir -p bin
-	$(CC) -o regvm $^
-	mv regvm bin
+build: $(OBJS) setup-dirs
+	$(CC) -o $(BINDIR)/$(BINARY) $(OBJS)
 
 clean:
-	rm -rf obj/ bin/ src/*.pch
+	rm -rf $(OBJDIR) $(BINDIR) src/*.pch
 
 bear:
 	bear -- make
