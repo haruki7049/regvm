@@ -1,4 +1,5 @@
 CFLAGS ?= -Wall
+CC ?= gcc
 
 build: main.o
 	mkdir -p bin
@@ -6,7 +7,7 @@ build: main.o
 	mv regvm bin
 
 main.o: src/main.c
-	${CC} -c $^
+	${CC} ${CFLAGS} -c $^
 
 clean: main.o bin/
 	rm -r $^
