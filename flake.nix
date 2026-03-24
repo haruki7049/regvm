@@ -43,6 +43,7 @@
             pkgs.nil # Nix LSP
             pkgs.clang-tools # C / C++ toolchain
             pkgs.gnumake # GNU Make
+            pkgs.bear # A tool for generating compile_commands.json
           ];
         in
         {

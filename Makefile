@@ -11,3 +11,6 @@ main.o: src/main.c
 
 clean: main.o bin/
 	rm -r $^
+
+bear:
+	bear -- make
