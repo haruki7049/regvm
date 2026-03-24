@@ -2,10 +2,11 @@ CFLAGS ?= -Wall
 
 build: main.o
 	mkdir -p bin
-	cc -o bin/regvm $^
+	cc -o regvm $^
+	mv regvm bin
 
 main.o: src/main.c
 	${CC} -c $^
 
-clean: main.o
-	rm $^
+clean: main.o bin/
+	rm -r $^
