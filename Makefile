@@ -1,5 +1,9 @@
 CC ?= gcc
 CFLAGS := -Wall
+
+# External libraries
+CFLAGS += $(shell pkg-config --cflags argtable3)
+
 BINARY := regvm
 OBJDIR := obj
 SRCDIR := src
