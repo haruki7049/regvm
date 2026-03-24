@@ -4,6 +4,8 @@ SOURCE := main.c
 CFLAGS := -Wall
 CC := gcc
 
+.PHONY: build
+
 build: main.o
 	mkdir -p bin
 	cc -o regvm $^
