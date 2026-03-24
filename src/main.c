@@ -1,4 +1,4 @@
-#include "./main.h"
+#include "./vm.h"
 #include <stdio.h>
 
 int main() {
@@ -12,14 +12,4 @@ int main() {
 
   printf("Hello, it's regvm!!\n");
   return 0;
-}
-
-struct RegVM create_reg_vm() {
-  struct RegVM result;
-  result.r0 = 0;
-  result.r1 = 0;
-  result.r2 = 0;
-  result.r3 = 0;
-
-  return result;
 }

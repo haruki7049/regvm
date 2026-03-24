@@ -3,20 +3,18 @@ CFLAGS := -Wall -c
 BINARY := regvm
 OBJDIR := obj
 SRCDIR := src
+SRCS := $(wildcard $(SRCDIR)/*.c)
 
 .PHONY: build
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
-	@$(CC) $(CFLAGS) $< -o $@
+$(OBJDIR)/%.o: $(SRCS)
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) $^
 
-build: $(OBJDIR)/main.o
-	@mkdir -p bin
-	@$(CC) -o regvm $^
-	@mv regvm bin
-
-run: build
-	@./bin/regvm
+build: $(OBJDIR)/*.o
+	mkdir -p bin
+	$(CC) -o regvm $^
+	mv regvm bin
 
 clean:
 	rm -rf obj/ bin/ src/*.pch
