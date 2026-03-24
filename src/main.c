@@ -12,7 +12,6 @@ int main(int argc, char *argv[]) {
   void *argtable[] = {
       help = arg_lit0("h", "help", "display this help and exit"),
       version = arg_lit0("V", "version", "display version info and exit"),
-
       end = arg_end(20),
   };
   int argtable_size = sizeof(argtable) / sizeof(argtable[0]);
