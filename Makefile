@@ -1,3 +1,5 @@
+CFLAGS ?= -Wall
+
 build: main.o
 	mkdir -p bin
 	cc -o bin/regvm $^
