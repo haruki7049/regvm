@@ -6,7 +6,7 @@ build: main.o
 	cc -o regvm $^
 	mv regvm bin
 
-main.o: src/main.c
+main.o: src/main.c src/main.h
 	${CC} ${CFLAGS} -c $^
 
 clean: main.o bin/
