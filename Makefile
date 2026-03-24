@@ -28,9 +28,6 @@ build: $(OBJS) setup-dirs
 clean:
 	rm -rf $(OBJDIR) $(BINDIR) src/*.pch
 
-bear:
-	bear -- make
-
 run: build
 	@echo -ne "\n"
 	./bin/regvm
