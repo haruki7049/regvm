@@ -1,4 +1,4 @@
-CC := gcc
+CC ?= gcc
 CFLAGS := -Wall -c
 BINARY := regvm
 OBJDIR := obj
