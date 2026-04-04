@@ -12,7 +12,12 @@ pub trait CounterMachine {
 }
 
 impl CounterMachine for RegVM {
-    fn run(&mut self, instructions: Vec<Instruction>) {}
+    fn run(&mut self, instructions: Vec<Instruction>) {
+        loop {
+            let mut instr = &instructions[self.pc];
+            let mut op = instr.r;
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -20,11 +25,16 @@ pub enum Instruction {
     /// # Decrement instruction
     ///
     /// もしも1つ目のレジスタが0よりも大きかったら2番目に指定した行へ行く。0以下だったら三番目に指定した行へ行く。
-    ///
-    /// 1. レジスタ番号
-    /// 1. 行
-    /// 1. 行
-    Dec(usize, usize, usize),
+    Dec {
+        /// Register number
+        r: usize,
+
+        /// Line number
+        if_big_line: usize,
+
+        /// Line number
+        if_small_line: usize,
+    },
 
     /// # Increment instruction
     ///
