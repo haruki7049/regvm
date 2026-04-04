@@ -1,9 +1,10 @@
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Default, PartialEq, Eq)]
 pub struct RegVM {
-    r0: isize,
-    r1: isize,
-    r2: isize,
-    r3: isize,
+    pc: usize,
+    r0: usize,
+    r1: usize,
+    r2: usize,
+    r3: usize,
 }
 
 pub trait CounterMachine {
@@ -16,23 +17,24 @@ impl CounterMachine for RegVM {
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Instruction {
-    /// Decrement instruction
+    /// # Decrement instruction
+    ///
+    /// もしも1つ目のレジスタが0よりも大きかったら2番目に指定した行へ行く。0以下だったら三番目に指定した行へ行く。
     ///
     /// 1. レジスタ番号
     /// 1. 行
     /// 1. 行
-    /// もしも1つ目のレジスタが0よりも大きかったら2番目に指定した行へ行く。0以下だったら三番目に指定した行へ行く。
     Dec(usize, usize, usize),
 
-    /// Increment instruction
+    /// # Increment instruction
+    ///
+    /// 指定したレジスタに1を足し、指定した行へと移動。
     ///
     /// 1. レジスタ番号
     /// 1. 行
-    ///
-    /// 指定したレジスタに1を足し、指定した行へと移動。
     Inc(usize, usize),
 
-    /// Halt instruction
+    /// # Halt instruction
     ///
     /// マシンを停止する。
     Halt,
