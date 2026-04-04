@@ -111,6 +111,7 @@ impl Runnable for Instruction {
     }
 }
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Error)]
 enum RunnableError {
     #[error("the runnable value does not have a register number")]
