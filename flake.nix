@@ -1,18 +1,19 @@
 {
   inputs = {
-    # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
-    # Nix flakes' utilities
+    systems.url = "github:nix-systems/default";
+    crane.url = "github:ipetkov/crane";
     flake-compat.url = "github:edolstra/flake-compat";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-
-    # treefmt-nix: Treefmt for Nix flakes
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -20,11 +21,7 @@
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
+      systems = import inputs.systems;
 
       imports = [
         inputs.treefmt-nix.flakeModule
@@ -35,31 +32,73 @@
           config,
           lib,
           pkgs,
+          system,
           ...
         }:
         let
-          buildInputs = [
-            pkgs.argtable # A CLI parser library
-            pkgs.linenoise # A interpreter library which is an alternative to GNU readline
-          ];
+          rust = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+          craneLib = (inputs.crane.mkLib pkgs).overrideToolchain rust;
+          overlays = [ inputs.rust-overlay.overlays.default ];
+          src = lib.cleanSource ./.;
+
+          buildInputs = [ ];
           nativeBuildInputs = [
             pkgs.nil # Nix LSP
-            pkgs.pkg-config # pkg-config
-            pkgs.clang-tools # C / C++ toolchain
-            pkgs.gnumake # GNU Make
-            pkgs.bear # A tool for generating compile_commands.json
+            rust # Rust toolchain
           ];
+          cargoArtifacts = craneLib.buildDepsOnly {
+            inherit src buildInputs nativeBuildInputs;
+          };
+          regvm = craneLib.buildPackage {
+            inherit
+              src
+              cargoArtifacts
+              buildInputs
+              nativeBuildInputs
+              ;
+            strictDeps = true;
+            doCheck = true;
+
+            meta = {
+              licenses = [ lib.licenses.mit ];
+              mainProgram = "regvm";
+            };
+          };
+          cargo-clippy = craneLib.cargoClippy {
+            inherit
+              src
+              cargoArtifacts
+              buildInputs
+              nativeBuildInputs
+              ;
+            cargoClippyExtraArgs = "--verbose -- --deny warnings";
+          };
+          cargo-doc = craneLib.cargoDoc {
+            inherit
+              src
+              cargoArtifacts
+              buildInputs
+              nativeBuildInputs
+              ;
+          };
         in
         {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system overlays;
+          };
+
           treefmt = {
-            projectRootFile = ".git/config";
+            projectRootFile = "flake.nix";
 
             # Nix
             programs.nixfmt.enable = true;
 
-            # C / C++
-            programs.clang-format.enable = true;
-            programs.clang-tidy.enable = true;
+            # Rust
+            programs.rustfmt.enable = true;
+            settings.formatter.rustfmt.command = "${rust}/bin/rustfmt";
+
+            # TOML
+            programs.taplo.enable = true;
 
             # GitHub Actions
             programs.actionlint.enable = true;
@@ -72,13 +111,24 @@
             programs.shfmt.enable = true;
           };
 
+          packages = {
+            inherit regvm;
+            default = regvm;
+            doc = cargo-doc;
+          };
+
+          checks = {
+            inherit cargo-clippy;
+          };
+
           devShells.default = pkgs.mkShell {
             inherit buildInputs nativeBuildInputs;
-            inputsFrom = [ config.treefmt.build.devShell ];
 
             shellHook = ''
               export PS1="\n[nix-shell:\w]$ "
             '';
+
+            inputsFrom = [ config.treefmt.build.devShell ];
           };
         };
     };
