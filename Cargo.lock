@@ -182,6 +182,9 @@ dependencies = [
 [[package]]
 name = "regvm"
 version = "0.1.0"
+dependencies = [
+ "thiserror",
+]
 
 [[package]]
 name = "sharded-slab"
